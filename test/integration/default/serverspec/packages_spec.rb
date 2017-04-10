@@ -34,3 +34,7 @@ end
 describe command('su - ubuntu -c \'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm list v7.7.2\'') do
   its(:stdout){ should match /v7\.7\.2/ }
 end
+
+describe command('su - ubuntu -c "/opt/crossbar/bin/crossbar version | grep Crossbar.io"') do
+ its(:stdout){ should match /^\ Crossbar.io        : 0\.13\.2$/ }
+end
