@@ -35,6 +35,11 @@ describe command('su - ubuntu -c \'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR
   its(:stdout){ should match /v7\.7\.2/ }
 end
 
-describe command('su - ubuntu -c "/opt/crossbar/bin/crossbar version | grep Crossbar.io"') do
- its(:stdout){ should match /^\ Crossbar.io        : 0\.13\.2$/ }
+describe command('su - ubuntu -c "\. ~/venv/bin/activate && crossbar version | grep Crossbar.io"') do
+ its(:stdout){ should match /^\ Crossbar.io\s.*: 17\.3\.1\s.*$/ }
+end
+
+describe service('crossbar') do
+  it { should be_enabled }
+  it { should be_running }
 end

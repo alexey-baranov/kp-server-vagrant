@@ -40,6 +40,58 @@ su - root -c '/opt/crossbar/bin/pypy -m pip install --upgrade pip'
 su - root -c '/opt/crossbar/bin/pypy -m pip install bcrypt'
 su - root -c '/opt/crossbar/bin/pypy -m pip install letsencrypt'
 
+# Crossbar upgrade
+su - root -c 'apt-add-repository ppa:pypy/ubuntu/ppa -y && apt-get update'
+su - root -c 'apt-get install build-essential libssl-dev python-pip pypy pypy-dev -y'
+su - root -c 'pip install --upgrade cffi'
+su - root -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install crossbar && pip uninstall crossbar -y'
+su - ubuntu -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install --upgrade cffi && pip install crossbar'
+
+# Crossbar service
+cat > /lib/systemd/system/crossbar.service <<- EOF
+
+# Crossbar
+[Unit]
+Description=Crossbar
+After=network.target
+
+[Service]
+PIDFile=/var/run/crossbar.pid
+ExecStart=/home/ubuntu/venv/bin/crossbar start --logdir /var/log/crossbar --logtofile
+ExecStop=/home/ubuntu/venv/bin/crossbar stop
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/htdocs/kp-client/dist
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+su - root -c 'mkdir -p /var/log/crossbar && chown -R ubuntu:ubuntu /var/log/crossbar'
+su - root -c 'systemctl enable crossbar'
+su - root -c 'systemctl daemon-reload'
+su - root -c 'systemctl start crossbar'
+
+# Crossbar logrotate
+cat > /etc/logrotate.d/crossbar <<- EOF
+
+/var/log/crossbar/*.log {
+       daily
+       rotate 10
+       copytruncate
+       delaycompress
+       compress
+       notifempty
+       missingok
+       create 0640 ubuntu ubuntu
+       su ubuntu ubuntu
+       sharedscripts
+       postrotate
+               systemctl restart crossbar >/dev/null 2>&1
+       endscript
+}
+EOF
+
 # NVM
 su - ubuntu -c 'wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash'
 su - ubuntu -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm install v7.7.2'
@@ -50,9 +102,9 @@ debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Si
 su - root -c 'apt-get install -y postfix'
 
 # xubuntu-desktop
-#su - root -c 'apt-get install -y xubuntu-desktop'
-#systemctl disable lightdm.service
-#service lightdm stop
+su - root -c 'apt-get install -y xubuntu-desktop'
+systemctl disable lightdm.service
+service lightdm stop
 
 # SFTP
 su - root -c 'apt-get install mysecureshell -y'
@@ -189,7 +241,6 @@ EOF
 
 # Nginx update configs to kopnik.org
 cat > /etc/nginx/nginx.conf <<- EOF
-
 pid /run/nginx.pid;
 user www-data;
 worker_processes 4;
@@ -202,8 +253,17 @@ http {
     access_log /var/log/nginx/access.log;
     default_type application/octet-stream;
     error_log /var/log/nginx/error.log;
+
     gzip on;
     gzip_disable msie6;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_min_length 256;
+    gzip_types text/plain text/css application/json application/x-javascript application/javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+
     include /etc/nginx/mime.types;
     keepalive_timeout 65;
     sendfile on;
@@ -220,13 +280,13 @@ EOF
 
 cat > /etc/nginx/sites-available/kopnik.org <<- EOF
 server {
-  listen 443 ssl;
+  listen 443 ssl default_server;
   root /home/ubuntu/htdocs/kp-client/dist;
   server_name kopnik.org www.kopnik.org;
   ssl_certificate /etc/letsencrypt/live/kopnik.org/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/kopnik.org/privkey.pem;
 
-    location / {
+    location /ws {
         # switch off logging
         access_log off;
 
@@ -240,6 +300,29 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
+    }
+
+    location ~* /^(upload|download) {
+        # switch off logging
+        access_log off;
+
+        # redirect all HTTP traffic to localhost:8484
+        proxy_pass http://localhost:8484;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+
+    location /sw.js {
+        # switch off logging
+        access_log off;
+
+        add_header Cache-Control "max-age=0, private, must-revalidate";
+    }
+
+    location / {
+        # switch off logging
+        access_log off;
     }
 
 }

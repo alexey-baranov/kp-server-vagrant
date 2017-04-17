@@ -20,6 +20,15 @@ describe port('443') do
   it { should be_listening.on('0.0.0.0').with('tcp') }
 end
 
-#describe command('su - postgres -c \'psql -tA -c "show max_connections"\'') do
-#  its(:stdout){ should match /^1000$/ }
-#end
+describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I https://localhost/index.html') do
+ its(:stdout){ should match /Content-Encoding: gzip/ }
+end
+
+describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I https://localhost/static/js/vendor.81b3573d4b53dff458a3.js') do
+ its(:stdout){ should match /Content-Encoding: gzip/ }
+end
+
+describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I https://localhost/sw.js') do
+ its(:stdout){ should match /Cache-Control: max-age=0, private, must-revalidate/ }
+ its(:stdout){ should match /Content-Encoding: gzip/ }
+end

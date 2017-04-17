@@ -4,13 +4,13 @@ Vagrant.configure("2") do |c|
   c.vm.hostname = "default-bento-ubuntu-1604.vagrantup.com"
   c.vm.synced_folder ".", "/vagrant", disabled: true
 
-  #c.vm.provider :digital_ocean do |p, override|
-  #  override.ssh.private_key_path = '~/.ssh/id_rsa'
-  #  p.ssh_key_name = 'sergey-korolev-pub'
-  #  p.token = ENV['DIGITALOCEAN_ACCESS_TOKEN']
-  #  p.image = 'ubuntu-16-04-x64'
-  #  p.size = '2gb'
-  #end
+  c.vm.provider :digital_ocean do |p, override|
+    override.ssh.private_key_path = '~/.ssh/id_rsa'
+    p.ssh_key_name = 'sergey-korolev-pub'
+    p.token = ENV['DIGITALOCEAN_ACCESS_TOKEN']
+    p.image = 'ubuntu-16-04-x64'
+    p.size = '2gb'
+  end
 
   c.vm.provision "shell" do |s|
     # Скрипт настройки
