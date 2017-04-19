@@ -45,7 +45,7 @@ su - root -c 'apt-add-repository ppa:pypy/ubuntu/ppa -y && apt-get update'
 su - root -c 'apt-get install build-essential libssl-dev python-pip pypy pypy-dev -y'
 su - root -c 'pip install --upgrade cffi'
 su - root -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install crossbar && pip uninstall crossbar -y'
-su - ubuntu -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install --upgrade cffi && pip install crossbar'
+su - ubuntu -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install --upgrade cffi && pip install crossbar && pip install psycopg2cffi bcrypt'
 
 # Crossbar service
 cat > /lib/systemd/system/crossbar.service <<- EOF
@@ -327,6 +327,14 @@ server {
 
 }
 EOF
+
+#  348  vi /etc/group
+#  349  chmod g+rx /etc/letsencrypt/archive/
+#  350  chmod g+rx /etc/letsencrypt/archive/kopnik.org/
+#  351  chmod g+r /etc/letsencrypt/archive/kopnik.org/*
+#  352  chmod g+rx /etc/letsencrypt/live/
+#  353  chmod g+rx /etc/letsencrypt/live/kopnik.org/
+#  354  ls -al /etc/letsencrypt/live/kopnik.org/
 
 su - root -c 'rm /etc/nginx/sites-enabled/kopnik.org ; ln -s /etc/nginx/sites-available/kopnik.org /etc/nginx/sites-enabled/kopnik.org'
 su - root -c 'nginx -t && service nginx restart'
