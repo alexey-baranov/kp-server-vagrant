@@ -32,3 +32,19 @@ describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip"
  its(:stdout){ should match /Cache-Control: max-age=0, private, must-revalidate/ }
  its(:stdout){ should match /Content-Encoding: gzip/ }
 end
+
+describe port('80') do
+  it { should be_listening.on('0.0.0.0').with('tcp') }
+end
+
+describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I http://localhost/index.html') do
+ its(:stdout){ should match /HTTP\/1\.1 301 Moved Permanently/ }
+ its(:stdout){ should match /Location: https:\/\/kopnik.org\/index\.html/ }
+end
+
+describe command('curl -k --location --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I http://localhost/index.html') do
+ its(:stdout){ should match /HTTP\/1\.1 301 Moved Permanently/ }
+ its(:stdout){ should match /Location: https:\/\/kopnik\.org\/index\.html/ }
+ its(:stdout){ should match /HTTP\/1\.1 200 OK/ }
+ its(:stdout){ should match /Content-Encoding: gzip/ }
+end

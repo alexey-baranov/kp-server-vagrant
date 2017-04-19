@@ -280,6 +280,12 @@ EOF
 
 cat > /etc/nginx/sites-available/kopnik.org <<- EOF
 server {
+    listen 80;
+    server_name kopnik.org www.kopnik.org;
+    return 301 https://\$host\$request_uri;
+}
+
+server {
   listen 443 ssl default_server;
   root /home/ubuntu/htdocs/kp-client/dist;
   server_name kopnik.org www.kopnik.org;
@@ -327,14 +333,6 @@ server {
 
 }
 EOF
-
-#  348  vi /etc/group
-#  349  chmod g+rx /etc/letsencrypt/archive/
-#  350  chmod g+rx /etc/letsencrypt/archive/kopnik.org/
-#  351  chmod g+r /etc/letsencrypt/archive/kopnik.org/*
-#  352  chmod g+rx /etc/letsencrypt/live/
-#  353  chmod g+rx /etc/letsencrypt/live/kopnik.org/
-#  354  ls -al /etc/letsencrypt/live/kopnik.org/
 
 su - root -c 'rm /etc/nginx/sites-enabled/kopnik.org ; ln -s /etc/nginx/sites-available/kopnik.org /etc/nginx/sites-enabled/kopnik.org'
 su - root -c 'nginx -t && service nginx restart'
