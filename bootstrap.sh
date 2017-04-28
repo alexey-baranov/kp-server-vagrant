@@ -255,6 +255,8 @@ http {
     default_type application/octet-stream;
     error_log /var/log/nginx/error.log;
 
+    client_max_body_size 25m;
+
     gzip on;
     gzip_disable msie6;
     gzip_vary on;
