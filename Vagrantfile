@@ -4,13 +4,13 @@ Vagrant.configure("2") do |c|
   c.vm.hostname = "default-bento-ubuntu-1604.vagrantup.com"
   c.vm.synced_folder ".", "/vagrant", disabled: true
 
-  c.vm.provider :digital_ocean do |p, override|
-    override.ssh.private_key_path = '~/.ssh/id_rsa'
-    p.ssh_key_name = 'sergey-korolev-pub'
-    p.token = ENV['DIGITALOCEAN_ACCESS_TOKEN']
-    p.image = 'ubuntu-16-04-x64'
-    p.size = '2gb'
-  end
+#  c.vm.provider :digital_ocean do |p, override|
+#    override.ssh.private_key_path = '~/.ssh/id_rsa'
+#    p.ssh_key_name = 'sergey-korolev-pub'
+#    p.token = ENV['DIGITALOCEAN_ACCESS_TOKEN']
+#    p.image = 'ubuntu-16-04-x64'
+#    p.size = '2gb'
+#  end
 
   c.vm.provision "shell" do |s|
     # Скрипт настройки
@@ -30,6 +30,13 @@ Vagrant.configure("2") do |c|
   #c.vm.synced_folder ".", "/home/ubuntu/htdocs", owner: "ubuntu", group: "ubuntu", create: true
 
   # TODO: add network configuration host/bridge/static/dhcp options
+  # Иcточник знаний для детальной конфигурацци https://www.vagrantup.com/docs/networking/public_network.html
+  # Простой бридж с DHCP
+  # c.vm.network "public_network"
+
+  # Бридж со статичным IP, которое конечто же надо поменять перед vagrant up
+  # c.vm.network "public_network", ip: "192.168.0.17"
+
   # Маппинг портов для доступа к приложу и к базе с хостовой системы
   # http://localhost:8080
   c.vm.network "forwarded_port", guest: 80, host: 8080
