@@ -11,6 +11,7 @@ su - root -c 'apt-get update'
 su - root -c 'apt-get install ruby -y'
 
 # User ubuntu, creates only if virtual environment, in production should be created at Ubuntu installation step
+# TODO: set password if user isn't exists
 id ubuntu > /dev/null 2>&1 || adduser --disabled-password --gecos "" ubuntu
 
 # NTP
@@ -278,6 +279,7 @@ http {
 }
 EOF
 
+# TODO: Update nginx config from prod server
 cat > /etc/nginx/sites-available/kopnik.org <<- EOF
 server {
     listen 80;
@@ -336,3 +338,6 @@ EOF
 
 su - root -c 'rm /etc/nginx/sites-enabled/kopnik.org ; ln -s /etc/nginx/sites-available/kopnik.org /etc/nginx/sites-enabled/kopnik.org'
 su - root -c 'nginx -t && service nginx restart'
+
+# for virtual machines - download code from site manually
+# cd /home/ubuntu/htdocs/kp-client && scp -r ubuntu@kopnik.org:/home/ubuntu/htdocs/kp-client/dist .

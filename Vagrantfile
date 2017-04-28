@@ -29,6 +29,7 @@ Vagrant.configure("2") do |c|
   # Монтирование локальной папки с проектом внутрь виртуальной машины
   #c.vm.synced_folder ".", "/home/ubuntu/htdocs", owner: "ubuntu", group: "ubuntu", create: true
 
+  # TODO: add network configuration host/bridge/static/dhcp options
   # Маппинг портов для доступа к приложу и к базе с хостовой системы
   # http://localhost:8080
   c.vm.network "forwarded_port", guest: 80, host: 8080
