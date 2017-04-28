@@ -25,6 +25,7 @@ end
 
 describe user('ubuntu') do
   it { should exist }
+  its(:encrypted_password) { should match(/^\$6\$.{8}\$.{86}$/) }
 end
 
 describe command('su - ubuntu -c \'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm --version\'') do

@@ -24,7 +24,7 @@ describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip"
  its(:stdout){ should match /Content-Encoding: gzip/ }
 end
 
-describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I https://localhost/static/js/vendor.81b3573d4b53dff458a3.js') do
+describe command('curl -k --header "Host: kopnik.org" -H "Accept-Encoding: gzip" -I https://localhost/static/js/vendor.3f4f7e0071e4e286275b.js') do
  its(:stdout){ should match /Content-Encoding: gzip/ }
 end
 
@@ -47,4 +47,8 @@ describe command('curl -k --location --header "Host: kopnik.org" -H "Accept-Enco
  its(:stdout){ should match /Location: https:\/\/kopnik\.org\/index\.html/ }
  its(:stdout){ should match /HTTP\/1\.1 200 OK/ }
  its(:stdout){ should match /Content-Encoding: gzip/ }
+end
+
+describe file('/etc/nginx/nginx.conf') do
+ its(:content){ should match /client_max_body_size 25m;/ }
 end
