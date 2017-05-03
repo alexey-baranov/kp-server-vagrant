@@ -11,8 +11,7 @@ su - root -c 'apt-get update'
 su - root -c 'apt-get install ruby -y'
 
 # User ubuntu, creates only if virtual environment, in production should be created at Ubuntu installation step
-# TODO: set password if user isn't exists
-id ubuntu > /dev/null 2>&1 || adduser --disabled-password --gecos "" ubuntu
+id ubuntu > /dev/null 2>&1 || ( adduser --disabled-password --gecos "" ubuntu && echo ubuntu:Jachgib4 | chpasswd )
 
 # NTP
 su - root -c 'apt-get install ntp -y'
@@ -45,8 +44,8 @@ su - root -c '/opt/crossbar/bin/pypy -m pip install letsencrypt'
 su - root -c 'apt-add-repository ppa:pypy/ubuntu/ppa -y && apt-get update'
 su - root -c 'apt-get install build-essential libssl-dev python-pip pypy pypy-dev -y'
 su - root -c 'pip install --upgrade cffi'
-su - root -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install crossbar && pip uninstall crossbar -y'
-su - ubuntu -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install --upgrade cffi && pip install crossbar && pip install psycopg2cffi bcrypt'
+su - root -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install crossbar==17.3.1 && pip uninstall crossbar -y'
+su - ubuntu -c 'virtualenv ~/venv && \. ~/venv/bin/activate && pip install --upgrade cffi && pip install crossbar==17.3.1 && pip install psycopg2cffi bcrypt'
 
 # Crossbar service
 cat > /lib/systemd/system/crossbar.service <<- EOF
@@ -103,7 +102,7 @@ debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Si
 su - root -c 'apt-get install -y postfix'
 
 # xubuntu-desktop
-su - root -c 'apt-get install -y xubuntu-desktop'
+#su - root -c 'apt-get install -y xubuntu-desktop'
 systemctl disable lightdm.service
 service lightdm stop
 
@@ -281,7 +280,6 @@ http {
 }
 EOF
 
-# TODO: Update nginx config from prod server
 cat > /etc/nginx/sites-available/kopnik.org <<- EOF
 server {
     listen 80;

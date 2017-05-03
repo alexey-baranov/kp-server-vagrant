@@ -38,6 +38,19 @@ Host default
 
 Если хост платформа Windows, то рекрмендуется на нее установить https://git-for-windows.github.io/ чтобы был доступен ssh клиент и работал доступ через vagrant ssh
 
+# Настройки сети для vagrant машины
+
+Если хочется чтобы vagrant машина была доступна в локальной сети хостовой машины, нужно применить один из вариантов настройки в Vagrantfile указанных ниже.
+
+Иcточник знаний для детальной конфигурацци https://www.vagrantup.com/docs/networking/public_network.html
+
+## Простой бридж с DHCP
+c.vm.network "public_network"
+
+## Бридж со статичным IP, котороый конечно же надо поменять перед vagrant up
+c.vm.network "public_network", ip: "192.168.0.17"
+
+
 # Автоматизированные тесты с помощью testkitchen (https://kitchen.ci/)
 Выполнить все тесты и уничтожить vagrant/virtualbox машину если все тесты прошли
 ```

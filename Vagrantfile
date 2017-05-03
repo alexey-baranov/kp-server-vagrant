@@ -22,19 +22,18 @@ Vagrant.configure("2") do |c|
     # v.gui = true
 
     # Память и процессоры
-    v.memory = 2048
-    v.cpus = 2
+    v.memory = 512
+    v.cpus = 1
   end
 
   # Монтирование локальной папки с проектом внутрь виртуальной машины
   #c.vm.synced_folder ".", "/home/ubuntu/htdocs", owner: "ubuntu", group: "ubuntu", create: true
 
-  # TODO: add network configuration host/bridge/static/dhcp options
   # Иcточник знаний для детальной конфигурацци https://www.vagrantup.com/docs/networking/public_network.html
   # Простой бридж с DHCP
   # c.vm.network "public_network"
 
-  # Бридж со статичным IP, которое конечто же надо поменять перед vagrant up
+  # Бридж со статичным IP, который конечно же надо поменять перед vagrant up
   # c.vm.network "public_network", ip: "192.168.0.17"
 
   # Маппинг портов для доступа к приложу и к базе с хостовой системы
