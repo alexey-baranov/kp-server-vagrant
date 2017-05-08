@@ -102,7 +102,7 @@ debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Si
 su - root -c 'apt-get install -y postfix'
 
 # xubuntu-desktop
-#su - root -c 'apt-get install -y xubuntu-desktop'
+su - root -c 'apt-get install -y xubuntu-desktop'
 systemctl disable lightdm.service
 service lightdm stop
 
