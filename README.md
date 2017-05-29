@@ -119,3 +119,9 @@ Logrotate сервис для crossbar
        endscript
 }
 ```
+
+Обновление сертификатов
+```bash
+/root/certbot-auto certonly --webroot -w /home/ubuntu/htdocs/kp-client/dist -d kopnik.org -d www.kopnik.org --email alexey2baranov@gmail.com --non-interactive --agree-tos
+```
+в файле bootstrap.sh вставлены устаревшие.
