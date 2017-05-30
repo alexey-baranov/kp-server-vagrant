@@ -139,12 +139,12 @@ su - root -c 'wget -O /root/certbot-auto https://dl.eff.org/certbot-auto && chmo
 
 #- name: Request cert for kopnik.org (first time)
 #if [ ! -f /etc/letsencrypt/live/kopnik.org/fullchain.pem ]; then
-#  sudo su - root -c '/root/certbot-auto certonly --standalone -d kopnik.org -d www.kopnik.org  --email alexey2baranov@gmail.com  --non-interactive --agree-tos'
+#  sudo su - root -c 'cd /root && ./certbot-auto certonly --standalone -d kopnik.org -d www.kopnik.org  --email alexey2baranov@gmail.com  --non-interactive --agree-tos'
 #fi
 
 #- name: Update cert for kopnik.org (subsequent time)
 #if [ -f /etc/letsencrypt/live/kopnik.org/fullchain.pem ]; then
-#  sudo su - root -c '/root/certbot-auto certonly --webroot -w /home/ubuntu/htdocs/kp-client/dist -d kopnik.org -d www.kopnik.org --email alexey2baranov@gmail.com --non-interactive --agree-tos'
+#  sudo su - root -c 'cd /root && ./certbot-auto certonly --webroot -w /home/ubuntu/htdocs/kp-client/dist -d kopnik.org -d www.kopnik.org --email alexey2baranov@gmail.com --non-interactive --agree-tos'
 #fi
 
 # Place hardcoded certs
