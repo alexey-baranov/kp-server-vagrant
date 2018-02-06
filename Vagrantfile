@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |c|
   c.berkshelf.enabled = false if Vagrant.has_plugin?("vagrant-berkshelf")
-  c.vm.box = "bento/ubuntu-16.04"
-  c.vm.hostname = "default-bento-ubuntu-1604.vagrantup.com"
+  c.vm.box = "ubuntu/xenial64"
+  c.vm.hostname = "ubuntu1604.vagrant.com"
   c.vm.synced_folder ".", "/vagrant", disabled: true
 
 #  c.vm.provider :digital_ocean do |p, override|
@@ -14,7 +14,8 @@ Vagrant.configure("2") do |c|
 
   c.vm.provision "shell" do |s|
     # Скрипт настройки
-    s.path = 'bootstrap.sh'
+    #s.path = 'bootstrap.sh'
+    s.inline =''
   end
 
   c.vm.provider "virtualbox" do |v|
@@ -22,8 +23,8 @@ Vagrant.configure("2") do |c|
     # v.gui = true
 
     # Память и процессоры
-    v.memory = 512
-    v.cpus = 1
+    v.memory = 1024
+    v.cpus = 2
   end
 
   # Монтирование локальной папки с проектом внутрь виртуальной машины

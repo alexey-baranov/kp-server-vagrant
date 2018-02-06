@@ -10,8 +10,8 @@ vagrant up
 vagrant destroy
 ```
 
-# Доступ внутрь машины
-либо
+# Доступ внутрь машины (логин пароль vagrant:vagrant)
+либо из папки проекта 
 ```
 vagrant ssh
 ```

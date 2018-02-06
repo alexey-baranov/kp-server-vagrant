@@ -6,3 +6,6 @@
 
 # Idea
 .idea/
+
+#logs
+*.log
