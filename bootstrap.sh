@@ -7,6 +7,8 @@ dpkg-reconfigure locales -f noninteractive
 echo -e 'LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8' > /etc/default/locale
 
 # Prepare OS
+sudo sed -i 's/archive.ubuntu.com/mirror.yandex.ru/g' /etc/apt/sources.list
+
 su - root -c 'apt-get update'
 su - root -c 'apt-get install ruby -y'
 
