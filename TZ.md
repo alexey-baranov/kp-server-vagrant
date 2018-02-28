@@ -49,6 +49,7 @@ https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md
 - Внутри контейнера доступны порты для отправки почты 25, стандартынй порт Postgres, порт Crossbar 8080
 - Команда для запуска контейнера **npm run server:production**
 ## nginx
+https://docs.docker.com/samples/library/nginx/
 - Принимает входящие по 80 и 443 
 - Плагин для HTTP 2.0
 - Три маршрута /ws, /api и по умолчанию
