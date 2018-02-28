@@ -19,3 +19,9 @@ sudo passwd ubuntu
 ```
 sudo useradd ubuntu sudo
 ```
+
+vbox guest addition
+```
+sudo apt-get install virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms
+```
+https://askubuntu.com/questions/22743/how-do-i-install-guest-additions-in-a-virtualbox-vm
