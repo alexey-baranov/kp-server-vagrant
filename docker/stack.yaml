@@ -1,0 +1,35 @@
+# поднимает стек приложений
+# 1. СУБД с тремя базами: kopnik, dev, test
+# 2. почтовый сервер
+
+# docker stack deploy -c stack.yaml kopnik
+# docker stack rm kopnik
+
+version: '3.1'
+
+services:
+
+  db:
+    image: alexey2baranov/kp-db
+    container_name: kp-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./conf/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8090:8080
+
+#  visualizer:
+#    image: dockersamples/visualizer:stable
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"

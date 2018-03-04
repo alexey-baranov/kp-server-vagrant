@@ -28,6 +28,7 @@
 Ниже идут докер контейнеры. Все связи между контейнерами прописаны в общем compose- файле. Всe контейнеры поднимаются при помощи **docker stack deploy**. 
 ## Postgres
 https://docs.docker.com/engine/examples/postgresql_service/
+https://github.com/docker-library/docs/tree/master/postgres
 - Последняя LTS 
 - Стандартный порт торчит из контейнера  и виден в контейнере nodejs (сервер kopnik.org)
 - max_connections = 1000
